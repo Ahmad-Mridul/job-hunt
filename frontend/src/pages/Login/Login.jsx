@@ -1,10 +1,13 @@
-import React from "react";
 import { Link } from "react-router-dom";
-
+import Lottie from "lottie-react";
+import loginLottie from "../../assets/lotties/Login.json";
 const Login = () => {
     return (
-        <div className="flex items-center justify-center h-screen">
-            <div className="card border border-blue-400 bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+        <div className="md:flex items-center justify-around">
+            <div className="">
+                <Lottie animationData={loginLottie} />
+            </div>
+            <div className="card border border-blue-400 bg-base-100 w-full max-w-sm shrink-0 shadow-2xl md:mt-[-60px]">
                 <div className="card-body">
                     <fieldset className="fieldset">
                         <label className="label">Email</label>
@@ -24,7 +27,13 @@ const Login = () => {
                         </div>
                         <button className="btn btn-primary mt-4">Login</button>
                     </fieldset>
-                    <p>Don't have an account?<Link to="/register" className="hover:link"> Register Here</Link></p>
+                    <p>
+                        Don't have an account?
+                        <Link to="/register" className="hover:link">
+                            {" "}
+                            Register Here
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

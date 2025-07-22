@@ -1,10 +1,13 @@
-import React from "react";
-import { FcGoogle } from "react-icons/fc";
 import { Link } from "react-router-dom";
-
+import { FcGoogle } from "react-icons/fc";
+import Lottie from "lottie-react";
+import registerLottie from "../../assets/lotties/Register.json";
 const Register = () => {
     return (
-        <div className="flex items-center justify-center h-screen">
+        <div className="md:flex items-center space-y-10 justify-around">
+            <div className="">
+                <Lottie animationData={registerLottie} />
+            </div>
             <div className="card border border-blue-400 bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
                 <div className="card-body">
                     <fieldset className="fieldset">
@@ -24,7 +27,12 @@ const Register = () => {
                             Register
                         </button>
                     </fieldset>
-                    <p>Already have an account?<Link to="/login" className="hover:link"> Login here</Link></p>
+                    <p>
+                        Already have an account?
+                        <Link to="/login" className="hover:link">
+                            Login here
+                        </Link>
+                    </p>
                     <div className="divider">OR</div>
                     <button className="btn bg-white text-black mt-4">
                         <FcGoogle /> SignUp with Google
