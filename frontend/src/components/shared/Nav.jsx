@@ -16,13 +16,7 @@ const Nav = () => {
     const links = (
         <>
             <li>
-                <a>Item 1</a>
-            </li>
-            <li>
-                <a>Parent</a>
-            </li>
-            <li>
-                <a>Item 3</a>
+                <Link to="/" className="bg-base-200">Home</Link>
             </li>
         </>
     );

@@ -1,38 +1,11 @@
-const JobCard = ({ jobData }) => {
-    // const jobData = {
-    //     title: "Software Engineer",
-    //     location: "Chittagong",
-    //     jobType: "Hybrid",
-    //     company: "Favorite IT",
-    //     salaryRange: { min: 40000, max: 60000, currency: "BDT" },
-    //     requirements: ["JavaScript", "React", "Node.js"],
-    //     company_logo: "https://i.ibb.co/mXD5MNf/facebook.png",
-    // };
+import { RiMapPin2Fill } from "react-icons/ri";
+import { FaBriefcase } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
+const JobCard = ({ jobData }) => {
     const formatSalary = (min, max, currency) => {
         return `${min / 1000}k - ${max / 1000}k ${currency}`;
     };
-
-    // Simple Icons
-    const MapPinIcon = () => (
-        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-            <path
-                fillRule="evenodd"
-                d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-                clipRule="evenodd"
-            />
-        </svg>
-    );
-
-    const BriefcaseIcon = () => (
-        <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-            <path
-                fillRule="evenodd"
-                d="M6 6V5a3 3 0 013-3h2a3 3 0 013 3v1h2a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V8a2 2 0 012-2h2zm4-1a1 1 0 00-1 1v1h2V6a1 1 0 00-1-1z"
-                clipRule="evenodd"
-            />
-        </svg>
-    );
 
     return (
         <div className="h-full p-5 flex flex-col  bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 overflow-hidden border">
@@ -57,11 +30,11 @@ const JobCard = ({ jobData }) => {
 
                     <div className="flex items-center gap-2 mt-3">
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                            <MapPinIcon />
+                            <RiMapPin2Fill />
                             <span className="ml-1">{jobData.location}</span>
                         </span>
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
-                            <BriefcaseIcon />
+                            <FaBriefcase />
                             <span className="ml-1">{jobData.jobType}</span>
                         </span>
                     </div>
@@ -101,9 +74,9 @@ const JobCard = ({ jobData }) => {
             </div>
             {/* Actions */}
             <div className="flex gap-2 pt-2">
-                <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+                <Link to={`/api/jobs/${jobData._id}`} className="flex-1 text-center bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
                     Apply Now
-                </button>
+                </Link>
                 <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md text-sm hover:bg-gray-50 transition-colors">
                     Save
                 </button>
