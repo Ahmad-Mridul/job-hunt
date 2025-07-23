@@ -59,7 +59,7 @@ const Nav = () => {
                             {links}
                         </ul>
                     </div>
-                    <Link to="/" className="btn btn-outline text-xl">
+                    <Link to="/" className="btn  btn-outline btn-primary text-xl">
                         JOB🔍
                     </Link>
                 </div>
