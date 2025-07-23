@@ -11,7 +11,7 @@
 
 *A modern, full-stack job listing platform that connects talent with opportunity*
 
-[🚀 Live Demo](job247.netlify.app) 
+[🚀 Live Demo](https://job247.netlify.app/) 
 
 </div>
 
