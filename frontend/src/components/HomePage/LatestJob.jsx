@@ -5,7 +5,7 @@ const LatestJob = () => {
     const [jobs, setJobs] = useState([]);
     useEffect(() => {
         axios
-            .get("http://localhost:3000/api/jobs")
+            .get("https://jobseekerapi-one.vercel.app/api/jobs")
             .then((res) => {
                 setJobs(res.data);
             })
