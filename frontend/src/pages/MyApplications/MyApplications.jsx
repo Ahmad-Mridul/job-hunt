@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../Hooks/useAuth";
 import axios from "axios";
+import Loading from "../../components/shared/Loading";
 
 const MyApplications = () => {
     const { user } = useAuth();
@@ -12,6 +13,9 @@ const MyApplications = () => {
             )
             .then((res) => setJobs(res.data));
     }, [user.email]);
+    if(jobs.length===0){
+        return <Loading/>
+    }
     return (
         <div>
             <div className="overflow-x-auto">
