@@ -4,8 +4,7 @@ import { AuthContext } from "../../AuthProvider/AuthContext";
 
 const Nav = () => {
     const { user, userSignOut } = useContext(AuthContext);
-    const { displayName, email } = user;
-
+    
     const handleSignOut = () => {
         userSignOut()
             .then(() => {
@@ -87,7 +86,7 @@ const Nav = () => {
                         </>
                     ) : (
                         <>
-                            <p>{displayName ? displayName : email}</p>
+                            <p>{user?.displayName ? user?.displayName : user?.email}</p>
                             <button
                                 className="btn btn-primary"
                                 onClick={handleSignOut}

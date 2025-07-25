@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Lottie from "lottie-react";
 import loginLottie from "../../assets/lotties/Login.json";
 import { useContext, useState } from "react";
@@ -7,11 +7,14 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const { signinUserWithEmailPass } = useContext(AuthContext);
+    const navigate = useNavigate();
     const handleSignin = (e) => {
+
         e.preventDefault();
         signinUserWithEmailPass(email,pass)
         .then(user=>{
             console.log(user);
+            navigate("/");
         })
         .catch(err=>{
             console.log(err.message);

@@ -75,7 +75,7 @@ const ApplyJob = () => {
         const newApplication = {job_id:id,email:user.email,...formData}
         try {
             await axios.post(
-                "http://localhost:3000/api/job-applications",
+                "https://jobhunt-api.vercel.app/api/job-applications",
                 newApplication,{
                     timeout:3000
                 }
@@ -101,7 +101,7 @@ const ApplyJob = () => {
                 additionalInfo: "",
             });
 
-            navigate("/");
+            navigate("/my-applications");
         } catch (error) {
             console.error("Submission error:", error);
             alert(

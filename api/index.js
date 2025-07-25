@@ -39,19 +39,46 @@ async function run() {
 
         // get apllications
         app.get("/api/job-applications", async (req, res) => {
-            const result = applicationCollection.find();
-            const applications = await result.toArray();
-            res.send(applications);
+
+            const email = req.query.email;
+
+            if (!email) {
+                const allApps = await applicationCollection.find().toArray();
+                console.log("Returning all applications:", allApps.length);
+                return res.send(allApps);
+            }
+
+            try {
+                const query = {
+                    email
+                };
+                const result = await applicationCollection
+                    .find(query)
+                    .toArray();
+                for(const application of result){
+                    const jobQuery = {_id:new ObjectId(application.job_id)};
+                    const jobFind = await jobCollection.findOne(jobQuery);
+                    if(jobFind){
+                        application.company = jobFind.company;
+                        application.title = jobFind.title;
+                        application.company_logo = jobFind.company_logo;
+                    }
+                }
+                return res.send(result);
+            } catch (err) {
+                console.error("Error in /api/job-applications:", err);
+                res.status(500).json({ message: "Server error" });
+            }
         });
 
         // post applications
         app.post("/api/job-applications", async (req, res) => {
             const formData = req.body;
             const result = await applicationCollection.insertOne(formData);
-            
+
             res.status(200).json({
                 message: "Application submitted successfully",
-                data: formData,
+                data: result,
             });
         });
 
