@@ -8,6 +8,8 @@ import AuthProvider from "./AuthProvider/AuthProvider";
 import Register from "./pages/Register/Register";
 import JobDetailsPage from "./pages/JobDetailsPage/JobDetailsPage";
 import PrivateRoute from "./router/PrivateRoute";
+import ApplyJob from "./pages/ApplyJob/ApplyJob";
+import MyApplications from "./pages/MyApplications/MyApplications";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +32,14 @@ const router = createBrowserRouter([
                 path:"/api/jobs/:id",
                 element:<PrivateRoute><JobDetailsPage/></PrivateRoute>,
                 loader:({params})=>fetch(`https://jobhunt-api.vercel.app/api/jobs/${params.id}`)
+            },
+            {
+                path:'/applyjob/:id',
+                element:<PrivateRoute><ApplyJob></ApplyJob></PrivateRoute>
+            },
+            {
+                path:"/my-applications",
+                element:<PrivateRoute><MyApplications></MyApplications></PrivateRoute>
             }
         ],
     },

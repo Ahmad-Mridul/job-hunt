@@ -21,7 +21,9 @@ const client = new MongoClient(uri, {
 async function run() {
     try {
         const jobCollection = client.db("job_hunt").collection("jobs");
-
+        const applicationCollection = client
+            .db("job_hunt")
+            .collection("job_applications");
         app.get("/api/jobs", async (req, res) => {
             const result = jobCollection.find();
             const jobs = await result.toArray();
@@ -34,6 +36,25 @@ async function run() {
             const result = await jobCollection.findOne(query);
             res.send(result);
         });
+
+        // get apllications
+        app.get("/api/job-applications", async (req, res) => {
+            const result = applicationCollection.find();
+            const applications = await result.toArray();
+            res.send(applications);
+        });
+
+        // post applications
+        app.post("/api/job-applications", async (req, res) => {
+            const formData = req.body;
+            const result = await applicationCollection.insertOne(formData);
+            
+            res.status(200).json({
+                message: "Application submitted successfully",
+                data: formData,
+            });
+        });
+
         console.log(
             "Pinged your deployment. You successfully connected to MongoDB!"
         );

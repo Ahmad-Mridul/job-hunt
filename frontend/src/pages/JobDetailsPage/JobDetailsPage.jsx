@@ -1,10 +1,10 @@
-import { useLoaderData } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 
 const JobDetailsPage = () => {
     const job = useLoaderData();
 
     const formatSalary = (min, max, currency) =>
-        `${min / 1000}k - ${max / 1000}k ${currency.toUpperCase()}`;
+        `${min / 1000}k - ${max / 1000}k ${currency?.toUpperCase()}`;
 
     const formatDate = (dateStr) =>
         new Date(dateStr).toLocaleDateString("en-US", {
@@ -333,10 +333,10 @@ const JobDetailsPage = () => {
                         <div className="card bg-base-100 shadow-lg">
                             <div className="card-body">
                                 <div className="space-y-3">
-                                    <button className="btn btn-primary btn-lg w-full gap-2">
+                                    <Link to={`/applyjob/${job._id}`} className="btn btn-primary btn-lg w-full gap-2">
                                         <MailIcon />
                                         Apply Now
-                                    </button>
+                                    </Link>
                                     <button className="btn btn-outline btn-lg w-full gap-2">
                                         <BookmarkIcon />
                                         Save Job

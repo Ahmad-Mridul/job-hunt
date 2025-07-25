@@ -14,16 +14,16 @@ const JobCard = ({ jobData }) => {
                 <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50">
                     <div className="flex items-center space-x-3">
                         <img
-                            src={jobData.company_logo || "/placeholder.svg"}
-                            alt={jobData.company}
+                            src={jobData?.company_logo || "/placeholder.svg"}
+                            alt={jobData?.company}
                             className="w-10 h-10 rounded-lg object-contain bg-white p-1"
                         />
                         <div className="flex-1 min-w-0">
                             <h3 className="text-lg font-semibold text-gray-900 truncate">
-                                {jobData.title}
+                                {jobData?.title}
                             </h3>
                             <p className="text-sm text-gray-600">
-                                {jobData.company}
+                                {jobData?.company}
                             </p>
                         </div>
                     </div>
@@ -31,11 +31,11 @@ const JobCard = ({ jobData }) => {
                     <div className="flex items-center gap-2 mt-3">
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
                             <RiMapPin2Fill />
-                            <span className="ml-1">{jobData.location}</span>
+                            <span className="ml-1">{jobData?.location}</span>
                         </span>
                         <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
                             <FaBriefcase />
-                            <span className="ml-1">{jobData.jobType}</span>
+                            <span className="ml-1">{jobData?.jobType}</span>
                         </span>
                     </div>
                 </div>
@@ -47,9 +47,9 @@ const JobCard = ({ jobData }) => {
                         <span className="text-sm text-gray-600">Salary</span>
                         <span className="text-lg font-bold text-green-600">
                             {formatSalary(
-                                jobData.salaryRange.min,
-                                jobData.salaryRange.max,
-                                jobData.salaryRange.currency
+                                jobData?.salaryRange?.min,
+                                jobData?.salaryRange?.max,
+                                jobData?.salaryRange?.currency
                             )}
                         </span>
                     </div>
@@ -60,7 +60,7 @@ const JobCard = ({ jobData }) => {
                             Skills Required
                         </p>
                         <div className="flex flex-wrap gap-1">
-                            {jobData.requirements.map((skill, index) => (
+                            {jobData?.requirements?.map((skill, index) => (
                                 <span
                                     key={index}
                                     className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
@@ -74,7 +74,7 @@ const JobCard = ({ jobData }) => {
             </div>
             {/* Actions */}
             <div className="flex gap-2 pt-2">
-                <Link to={`/api/jobs/${jobData._id}`} className="flex-1 text-center bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+                <Link to={`/api/jobs/${jobData?._id}`} className="flex-1 text-center bg-blue-600 text-white py-2 px-4 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
                     Apply Now
                 </Link>
                 <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-md text-sm hover:bg-gray-50 transition-colors">

@@ -4,19 +4,31 @@ import { AuthContext } from "../../AuthProvider/AuthContext";
 
 const Nav = () => {
     const { user, userSignOut } = useContext(AuthContext);
+    const { displayName, email } = user;
+
     const handleSignOut = () => {
         userSignOut()
-        .then(()=>{
-            console.log("Sign Out Successfully");
-        })
-        .catch(err=>{
-            console.log(err.message);
-        })
-    }
+            .then(() => {
+                console.log("Sign Out Successfully");
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    };
     const links = (
         <>
             <li>
-                <Link to="/" className="bg-base-200">Home</Link>
+                <Link to="/" className="bg-base-200 hover:bg-gray-400">
+                    Home
+                </Link>
+            </li>
+            <li>
+                <Link
+                    to="/my-applications"
+                    className="bg-base-200 hover:bg-gray-400"
+                >
+                    My Applications
+                </Link>
             </li>
         </>
     );
@@ -53,12 +65,15 @@ const Nav = () => {
                             {links}
                         </ul>
                     </div>
-                    <Link to="/" className="btn  btn-outline btn-primary text-xl">
+                    <Link
+                        to="/"
+                        className="btn  btn-outline btn-primary text-xl"
+                    >
                         JOB🔍
                     </Link>
                 </div>
                 <div className="navbar-center hidden lg:flex">
-                    <ul className="menu menu-horizontal px-1">{links}</ul>
+                    <ul className="menu menu-horizontal px-1 gap-5">{links}</ul>
                 </div>
                 <div className="navbar-end gap-3">
                     {!user ? (
@@ -71,9 +86,15 @@ const Nav = () => {
                             </Link>
                         </>
                     ) : (
-                        <button className="btn btn-primary" onClick={handleSignOut}>
-                            SignOut
-                        </button>
+                        <>
+                            <p>{displayName ? displayName : email}</p>
+                            <button
+                                className="btn btn-primary"
+                                onClick={handleSignOut}
+                            >
+                                SignOut
+                            </button>
+                        </>
                     )}
                 </div>
             </div>
