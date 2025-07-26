@@ -73,9 +73,26 @@ async function run() {
 
         // post applications
         app.post("/api/job-applications", async (req, res) => {
-            const formData = req.body;
-            const result = await applicationCollection.insertOne(formData);
+            const application = req.body;
+            const result = await applicationCollection.insertOne(application);
 
+            const id = application.job_id;
+            const query = {_id:new ObjectId(id)};
+            const job = jobCollection.findOne(query);
+            let newCount = 0;
+            if(job.applicationCount){
+                newCount = job.applicationCount+1;
+            }else{
+                newCount=1;
+            }
+
+            const filter = {_id:new ObjectId(id)};
+            const updateDoc = {
+                $set:{
+                    applicationCount:newCount
+                }
+            }
+            const updatedResult = jobCollection.updateOne(filter,updateDoc);
             res.status(200).json({
                 message: "Application submitted successfully",
                 data: result,
