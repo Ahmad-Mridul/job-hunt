@@ -31,7 +31,7 @@ const router = createBrowserRouter([
             {
                 path:"/api/jobs/:id",
                 element:<PrivateRoute><JobDetailsPage/></PrivateRoute>,
-                loader:({params})=>fetch(`https://jobhunt-api.vercel.app/api/jobs/${params.id}`)
+                loader:({params})=>fetch(`http://localhost:3000/api/jobs/${params.id}`)
             },
             {
                 path:'/applyjob/:id',

@@ -3,22 +3,27 @@ import Lottie from "lottie-react";
 import loginLottie from "../../assets/lotties/Login.json";
 import { useContext, useState } from "react";
 import { AuthContext } from "../../AuthProvider/AuthContext";
+import axios from "axios";
 const Login = () => {
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
     const { signinUserWithEmailPass } = useContext(AuthContext);
     const navigate = useNavigate();
     const handleSignin = (e) => {
-
         e.preventDefault();
-        signinUserWithEmailPass(email,pass)
-        .then(user=>{
-            console.log(user);
-            navigate("/");
-        })
-        .catch(err=>{
-            console.log(err.message);
-        })
+        signinUserWithEmailPass(email, pass)
+            .then((result) => {
+                console.log("sign in: ", result.user.email);
+                const user = {email:email};
+                axios.post("http://localhost:3000/jwt",user,{
+                    withCredentials:true
+                })
+                .then(res=>console.log(res.data))
+                navigate("/");
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
         setEmail("");
         setPass("");
     };
@@ -29,6 +34,7 @@ const Login = () => {
             </div>
             <div className="card border border-blue-400 bg-base-100 w-full max-w-sm shrink-0 shadow-2xl md:mt-[-60px]">
                 <div className="card-body">
+                    <p>mr@gmail.com</p>
                     <form onSubmit={handleSignin} className="fieldset">
                         <label className="label">Email</label>
                         <input

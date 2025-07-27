@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import JobCard from "../shared/JobCard";
+
 const LatestJob = () => {
     const [jobs, setJobs] = useState([]);
+    
     useEffect(() => {
         axios
-            .get("https://jobhunt-api.vercel.app/api/jobs")
+            .get("http://localhost:3000/api/jobs",{withCredentials:true})
             .then((res) => {
                 setJobs(res.data);
             })

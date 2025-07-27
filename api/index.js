@@ -1,15 +1,36 @@
 require("dotenv").config();
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 var jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 const express = require("express");
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
 const cors = require("cors");
 const port = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+    cors({
+        origin: ["http://localhost:5173"],
+        credentials: true,
+    })
+);
 app.use(express.json());
 app.use(cookieParser());
+
+//. todo middleware verify token
+
+const verifyToken = (req, res, next) => {
+    const token = req?.cookies?.token;
+    if (!token) {
+        return res.status(401).send({ message: "Unauthorized access" });
+    }
+    jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+        if (err) {
+            return res.status(401).send({ message: "Unauthorized access" });
+        }
+        req.user = decoded;
+        next();
+    });
+};
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cqkzp8h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -27,7 +48,9 @@ async function run() {
         const applicationCollection = client
             .db("job_hunt")
             .collection("job_applications");
-        app.get("/api/jobs", async (req, res) => {
+
+        app.get("/api/jobs", verifyToken, async (req, res) => {
+            console.log("now inside the get api");
             const result = jobCollection.find();
             const jobs = await result.toArray();
             res.send(jobs);
@@ -41,40 +64,50 @@ async function run() {
         });
 
         // get apllications
-        app.get("/api/job-applications", async (req, res) => {
+        app.get("/api/my-applications", verifyToken, async (req, res) => {
             const email = req.query.email;
-
             if (!email) {
                 const allApps = await applicationCollection.find().toArray();
                 console.log("Returning all applications:", allApps.length);
                 return res.send(allApps);
             }
 
-            try {
-                const query = {
-                    email,
-                };
-                const result = await applicationCollection
-                    .find(query)
-                    .toArray();
-                for (const application of result) {
-                    const jobQuery = { _id: new ObjectId(application.job_id) };
-                    const jobFind = await jobCollection.findOne(jobQuery);
-                    if (jobFind) {
-                        application.company = jobFind.company;
-                        application.title = jobFind.title;
-                        application.company_logo = jobFind.company_logo;
-                    }
-                }
-                return res.send(result);
-            } catch (err) {
-                console.error("Error in /api/job-applications:", err);
-                res.status(500).json({ message: "Server error" });
+            const query = {
+                email,
+            };
+
+            if(req.user.email!==email){
+                return res.status(403).send({message:"forbidden access"});
             }
+
+
+            const result = await applicationCollection.find(query).toArray();
+            for (const application of result) {
+                const jobQuery = { _id: new ObjectId(application.job_id) };
+                const jobFind = await jobCollection.findOne(jobQuery);
+                if (jobFind) {
+                    application.company = jobFind.company;
+                    application.title = jobFind.title;
+                    application.company_logo = jobFind.company_logo;
+                }
+            }
+            return res.send(result);
+        });
+
+        // JWTAPI
+        app.post("/jwt", async (req, res) => {
+            const user = req.body;
+            const token = jwt.sign(user, process.env.SECRET_KEY, {
+                expiresIn: "1hr",
+            });
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: false,
+            }).send(token);
         });
 
         // post applications
-        app.post("/api/job-applications", async (req, res) => {
+        app.post("/api/my-applications", async (req, res) => {
             const application = req.body;
             const result = await applicationCollection.insertOne(application);
 
@@ -100,8 +133,6 @@ async function run() {
                 data: result,
             });
         });
-
-        // JWT
 
         console.log(
             "Pinged your deployment. You successfully connected to MongoDB!"

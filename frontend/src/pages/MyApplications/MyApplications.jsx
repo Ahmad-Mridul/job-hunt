@@ -9,7 +9,7 @@ const MyApplications = () => {
     useEffect(() => {
         axios
             .get(
-                `https://jobhunt-api.vercel.app/api/job-applications?email=${user.email}`
+                `http://localhost:3000/api/my-applications?email=${user.email}`,{withCredentials:true}
             )
             .then((res) => setJobs(res.data));
     }, [user.email]);
