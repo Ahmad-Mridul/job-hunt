@@ -1,4 +1,6 @@
 require("dotenv").config();
+var jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const app = express();
@@ -7,6 +9,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.cqkzp8h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -39,7 +42,6 @@ async function run() {
 
         // get apllications
         app.get("/api/job-applications", async (req, res) => {
-
             const email = req.query.email;
 
             if (!email) {
@@ -50,15 +52,15 @@ async function run() {
 
             try {
                 const query = {
-                    email
+                    email,
                 };
                 const result = await applicationCollection
                     .find(query)
                     .toArray();
-                for(const application of result){
-                    const jobQuery = {_id:new ObjectId(application.job_id)};
+                for (const application of result) {
+                    const jobQuery = { _id: new ObjectId(application.job_id) };
                     const jobFind = await jobCollection.findOne(jobQuery);
-                    if(jobFind){
+                    if (jobFind) {
                         application.company = jobFind.company;
                         application.title = jobFind.title;
                         application.company_logo = jobFind.company_logo;
@@ -77,27 +79,29 @@ async function run() {
             const result = await applicationCollection.insertOne(application);
 
             const id = application.job_id;
-            const query = {_id:new ObjectId(id)};
+            const query = { _id: new ObjectId(id) };
             const job = jobCollection.findOne(query);
             let newCount = 0;
-            if(job.applicationCount){
-                newCount = job.applicationCount+1;
-            }else{
-                newCount=1;
+            if (job.applicationCount) {
+                newCount = job.applicationCount + 1;
+            } else {
+                newCount = 1;
             }
 
-            const filter = {_id:new ObjectId(id)};
+            const filter = { _id: new ObjectId(id) };
             const updateDoc = {
-                $set:{
-                    applicationCount:newCount
-                }
-            }
-            const updatedResult = jobCollection.updateOne(filter,updateDoc);
+                $set: {
+                    applicationCount: newCount,
+                },
+            };
+            const updatedResult = jobCollection.updateOne(filter, updateDoc);
             res.status(200).json({
                 message: "Application submitted successfully",
                 data: result,
             });
         });
+
+        // JWT
 
         console.log(
             "Pinged your deployment. You successfully connected to MongoDB!"
